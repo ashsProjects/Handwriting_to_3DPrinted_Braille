@@ -1,0 +1,2 @@
+https://stackoverflow.com/questions/37479338/how-to-remove-a-contour-inside-contour-in-python-opencv: working with contours
+https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html: working with contours
