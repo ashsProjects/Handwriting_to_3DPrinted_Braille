@@ -4,6 +4,9 @@ braille-equivalent 3D-printed word. This is done using a Raspberry Pi that coord
 image onto the Pi and a 3D printer.
 
 # Directory/File Descriptions:
+  /ProcessImage.py: The python file that will find the contours of letters in word and seperate them into individual files. It is set to produce images of size 28x28 right now; can change
+  /Main.py: The main file that coordinates everything. It processes the image, seperates letters, calls the model to classify them, and forks a process to the Java file
+  /replace.java: Need to be changed
   /ArchivedImages: Where images are put after being processed. Useful for report<br><br>
   /ImagesForTesting: Where images to be testes are located; can be deleted<br><br>
   /IndividualLetters: This is where letters will be written to by the program after finding contours and seperating letters; will be emptied after each image is processed. Classifier model will read from this directory<br><br>
