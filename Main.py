@@ -4,6 +4,7 @@ import cv2
 import subprocess
 import ProcessImage
 import string
+import Print_STL
 import tensorflow as tf
 from keras.models import load_model
 
@@ -44,8 +45,8 @@ if __name__ == '__main__':
     
     word_to_print = ''.join(letters)
     
-    #fork, exec, and wait for process
-    run_java(word_to_print)
+    #Pass in the word to print
+    Print_STL.print(word=word_to_print)
     
     #Clear folders: IndividualLetters, InputImage, ProcessedImage for next word
     for f_name in os.listdir(path='InputImage'):
