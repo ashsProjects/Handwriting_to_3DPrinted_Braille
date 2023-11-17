@@ -7,12 +7,6 @@ import string
 import Print_STL
 import tensorflow as tf
 from keras.models import load_model
-
-def run_java(word):
-    java_file = 'replace.java'#replace with Java file
-    command = ['java', java_file, str(word)]#Javac must be in PATH
-    result = subprocess.run(command, capture_output=True, text=True)
-    print(f'Java process: {result.stdout if result.stdout != "" else result.stderr}')
     
 def reshape_image(image_path):
     img = cv2.imread('IndividualLetters/'+image_path, cv2.IMREAD_GRAYSCALE)
@@ -43,16 +37,16 @@ if __name__ == '__main__':
         y_pred = model.predict(image)
         letters.append(map_to_letter(y_pred))
     
-    word_to_print = ''.join(letters)
-    
     #Pass in the word to print
-    Print_STL.print(word=word_to_print)
+    Print_STL.run(letters)
     
     #Clear folders: IndividualLetters, InputImage, ProcessedImage for next word
     for f_name in os.listdir(path='InputImage'):
         os.remove("InputImage/" + f_name)
     for f_name in os.listdir(path='IndividualLetters'):
         os.remove("IndividualLetters/" + f_name)
+    for f_name in os.listdir(path='CombinedSTL'):
+        os.remove("CombinedSTL/" + f_name)
         
     print("Completed with no errors!")
     
