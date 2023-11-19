@@ -1,7 +1,6 @@
 import numpy as np
 import os
 import cv2
-import subprocess
 import ProcessImage
 import string
 import Print_STL
@@ -17,9 +16,16 @@ def reshape_image(image_path):
     return img_array
 
 def map_to_letter(prediction):
-    labels = string.digits+string.ascii_lowercase+string.ascii_uppercase
+    # labels = string.ascii_uppercase
+    labels = string.digits+string.ascii_uppercase+string.ascii_lowercase
     index = np.argmax(prediction)
     letter = labels[index]
+    
+    try:
+        letter = letter.lower()
+    except:
+        pass
+    
     return letter
 
 if __name__ == '__main__':
@@ -30,7 +36,7 @@ if __name__ == '__main__':
     folder = os.listdir('IndividualLetters')
     
     #load letter_classifier.h5 model to classify the letters
-    model = load_model('letter_classifier.h5')
+    model = load_model('letters_only_cnn.h5')
     
     for file in folder:
         image = reshape_image(file)
@@ -45,8 +51,6 @@ if __name__ == '__main__':
         os.remove("InputImage/" + f_name)
     for f_name in os.listdir(path='IndividualLetters'):
         os.remove("IndividualLetters/" + f_name)
-    for f_name in os.listdir(path='CombinedSTL'):
-        os.remove("CombinedSTL/" + f_name)
         
     print("Completed with no errors!")
     

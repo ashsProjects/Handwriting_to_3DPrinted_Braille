@@ -7,9 +7,8 @@ def seperate_letters():
     try:
         image_path = os.listdir('InputImage')[0]
     except:
-        print('There are no files in Images.')
+        print('There are no files in /InputImage.')
     image = cv2.imread('InputImage/'+image_path, 0)
-    image_copy = image.copy()
 
     #Apply Gaussian blur to reduce noise-Used ChatGPT to do this
     blurred_image = cv2.GaussianBlur(image, (5,5),0)
@@ -19,7 +18,8 @@ def seperate_letters():
 
     #color-inversion
     inverted_image = 255-processed_image
-    inverted_image[inverted_image < 150] = 0
+    inverted_image[inverted_image < 100] = 0
+    inverted_image[inverted_image >= 100] = 255
     
     # Find contours in the binary image
     contours, _ = cv2.findContours(inverted_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -45,11 +45,11 @@ def seperate_letters():
             # Ensure the bounding box stays within the image boundaries
             x = max(0, x)
             y = max(0, y)
-            w = min(image_copy.shape[1] - x, w)
-            h = min(image_copy.shape[0] - y, h)
+            w = min(inverted_image.shape[1] - x, w)
+            h = min(inverted_image.shape[0] - y, h)
             
             # Extract the letter from the original image with padding
-            letter = image_copy[y:y+h, x:x+w]
+            letter = inverted_image[y:y+h, x:x+w]
             
             #resize the images to 25x25 so there are 500 features
             letter = cv2.resize(letter, (28,28))
