@@ -1,7 +1,8 @@
 import numpy as np
 import os
 import cv2
-import ProcessImage
+import Process_Image
+import Run_3D_Printer
 import string
 import Print_STL
 import tensorflow as tf
@@ -29,7 +30,7 @@ def map_to_letter(prediction):
     return letter
 
 if __name__ == '__main__':
-    ProcessImage.seperate_letters()
+    Process_Image.seperate_letters()
     
     #read in all letters from the IndividualLettes folder
     letters = []
@@ -46,7 +47,10 @@ if __name__ == '__main__':
     #Pass in the word to print
     Print_STL.run(letters)
     
-    #Clear folders: IndividualLetters, InputImage, ProcessedImage for next word
+    #Use the combined stl file to convert it into gcode and print it
+    Run_3D_Printer.main()
+    
+    #Clear folders: IndividualLetters, InputImage for next word
     for f_name in os.listdir(path='InputImage'):
         os.remove("InputImage/" + f_name)
     for f_name in os.listdir(path='IndividualLetters'):
