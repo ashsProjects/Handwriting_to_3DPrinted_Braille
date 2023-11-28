@@ -25,29 +25,7 @@ def translate(_solid, step, padding, multiplier, axis):
     # _solid.points.shape == [:, ((x, y, z), (x, y, z), (x, y, z))]
     _solid.points[:, items] += (step * multiplier) + (padding * multiplier)
 
-def copy_obj(obj, dims, num_rows, num_cols, num_layers):
-    w, l, h = dims
-    copies = []
-    for layer in range(num_layers):
-        for row in range(num_rows):
-            for col in range(num_cols):
-                # skip the position where original being copied is
-                if row == 0 and col == 0 and layer == 0:
-                    continue
-                _copy = mesh.Mesh(obj.data.copy())
-                # pad the space between objects by 10% of the dimension being
-                # translated
-                if col != 0:
-                    translate(_copy, w, w / 10., col, 'x')
-                if row != 0:
-                    translate(_copy, l, l / 10., row, 'y')
-                if layer != 0:
-                    translate(_copy, h, h / 10., layer, 'z')
-                copies.append(_copy)
-    return copies
-
 def run(letters):
-    stl_folder = os.listdir('STLfiles')
     image_extension = '.stl'
     
     if len(letters) == 0: 
