@@ -18,7 +18,7 @@ def reshape_image(image_path):
 
 def map_to_letter(prediction):
     # labels = string.ascii_uppercase
-    labels = string.digits+string.ascii_uppercase+string.ascii_lowercase
+    labels = 'ssssssssss'+string.ascii_uppercase+string.ascii_lowercase #s for filler
     index = np.argmax(prediction)
     letter = labels[index]
     
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     
     #read in all letters from the IndividualLettes folder
     letters = []
-    folder = os.listdir('IndividualLetters')
+    folder = sorted(os.listdir('IndividualLetters'), key=len)
     
     #load letter_classifier.h5 model to classify the letters
     model = load_model('letters_only_cnn.h5')
