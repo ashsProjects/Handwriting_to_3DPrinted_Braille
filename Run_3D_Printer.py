@@ -1,14 +1,13 @@
 import subprocess
 import serial
 import time
+import paramiko
 
 def slice_stl_to_gcode():
     #Convert the stl file into gcode using slic3r
-    slic3r_path = ''
-    stl_file = 'CombinedSTL\combined_letters.stl'
-    output_gcode = 'CombinedSTL\output.gcode'
-    
-    command = [slic3r_path, '-g', stl_file, '--layer-height 0.2', '--output', output_gcode]
+    slic3r_path = '"C:\\Users\\Ayush Adhikari\\Documents\\Slic3r\\Slic3r-console.exe"'
+    stl_file = 'C:\\Users\\Ayush Adhikari\\Documents\\Handwriting_to_3DPrinted_Braille\\CombinedSTL\\combined_letters.stl'
+    command = [slic3r_path, stl_file, '--layer-height 0.2']
     
     try:
         subprocess.run(command, check=True)
@@ -16,35 +15,49 @@ def slice_stl_to_gcode():
     except subprocess.CalledProcessError as e:
         print(f'Error {e}')
 
-def send_to_3D_printer():
-    port = '' #Change this to Ender 3 Pro's port
-    baudrate = 115200
+def send_to_pi():
+    pi_ip = ''
+    pi_username = ''
+    pi_password = ''
     
-    # Open serial connection to the printer
+    local_path = 'CombinedSTL\combined_letters.gcode'
+    remote_path = ''
+    
+    #ssh setup
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    
     try:
-        ser = serial.Serial(port, baudrate, timeout=2)
-        print("Connected to", ser.name)
-    except serial.SerialException as e:
-        print("Failed to connect:", e)
-        exit()
+        #connect to the Raspberry Pi
+        ssh_client.connect(pi_ip, username=pi_username, password=pi_password)
+
+        #create an SFTP client session
+        sftp = ssh_client.open_sftp()
+        #upload the file to the Raspberry Pi
+        sftp.put(local_path, remote_path)
+        print(f"File '{local_path}' sent to '{pi_ip}:{remote_path}'")
+        #close the SFTP session
+        sftp.close()
+        
+        #execute command on Pi
+        command = f'python Send_to_Printer.py {remote_path}'
+        stdin, stdout, stderr = ssh_client.exec_command(command)
+        output = stdout.read().decode('utf-8')
+        print(f'Raspberry Pi command output: {output}')
+        
+    except paramiko.AuthenticationException as auth_exception:
+        print(f"Authentication failed: {auth_exception}")
+    except paramiko.SSHException as ssh_exception:
+        print(f"SSH connection failed: {ssh_exception}")
+    finally:
+        #close the SSH connection
+        ssh_client.close()
     
-    # Read the G-code file
-    gcode_file = 'CombinedSTL\output.gcode'
-    with open(gcode_file, 'r') as file:
-        gcode_commands = file.readlines()
-    
-    # Send G-code commands to the printer
-    for command in gcode_commands:
-        ser.write(command.strip().encode())
-        time.sleep(0.1) #0.1 is delay
-    
-    #close connection    
-    ser.close()
    
 def main():
     #call slice_stl_to_gcode for slicing
     slice_stl_to_gcode()
     
-    #read gcode and send to printer
-    send_to_3D_printer()
+    #send gcode file to Raspberry Pi and execute a command
+    send_to_pi()
     

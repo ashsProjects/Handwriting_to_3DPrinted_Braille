@@ -50,5 +50,5 @@ def run(letters):
             translate(stl_file, l1, l1 / 10., 1, 'y')
             combined = mesh.Mesh(numpy.concatenate([combined.data] + [stl_file.data]))
         
-        combined.save('CombinedSTL/combined_letters.stl', mode=stl.Mode.ASCII)  # save as ASCII
+        combined.save('CombinedSTL/combined_letters.stl', mode=stl.Mode.BINARY)  # save as ASCII
     
