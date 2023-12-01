@@ -3,13 +3,14 @@ import serial
 import time
 
 def send_to_3D_printer(file_path):
-    port = '' #Change this to Ender 3 Pro's port
+    port = 'COM3' #Change this to Ender 3 Pro's port
     baudrate = 115200
     
     # Open serial connection to the printer
     try:
         ser = serial.Serial(port, baudrate, timeout=2)
         print("Connected to", ser.name)
+        time.sleep(2)
     except serial.SerialException as e:
         print("Failed to connect:", e)
         exit()
@@ -20,11 +21,8 @@ def send_to_3D_printer(file_path):
     
     # Send G-code commands to the printer
     for command in gcode_commands:
-        ser.write(command.strip().encode())
-        time.sleep(0.1) #0.1 is delay
-    
-    #close connection    
-    ser.close()
+        ser.write(str.encode(command))
+        time.sleep(1)
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
@@ -33,5 +31,5 @@ if __name__ == '__main__':
 
     g_code_file_path = sys.argv[1]
     
-    send_to_3D_printer(g_code_file_path)
+    send_to_3D_printer('CombinedSTL\combined_letters.gcode')
 

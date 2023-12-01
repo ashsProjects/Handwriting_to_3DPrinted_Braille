@@ -1,27 +1,25 @@
 import subprocess
-import serial
-import time
 import paramiko
 
 def slice_stl_to_gcode():
     #Convert the stl file into gcode using slic3r
-    slic3r_path = '"C:\\Users\\Ayush Adhikari\\Documents\\Slic3r\\Slic3r-console.exe"'
-    stl_file = 'C:\\Users\\Ayush Adhikari\\Documents\\Handwriting_to_3DPrinted_Braille\\CombinedSTL\\combined_letters.stl'
-    command = [slic3r_path, stl_file, '--layer-height 0.2']
+    slic3r_path = r'"C:/Users/Ayush Adhikari/Documents/Slic3r/Slic3r-console.exe"'
+    stl_file = r'"CombinedSTL/combined_letters.stl"'
+    command = [slic3r_path, stl_file]
     
     try:
-        subprocess.run(command, check=True)
+        subprocess.run(command, check=True, shell=True)
         print('Slicing completed successfully')
     except subprocess.CalledProcessError as e:
         print(f'Error {e}')
 
 def send_to_pi():
-    pi_ip = ''
-    pi_username = ''
-    pi_password = ''
+    pi_ip = '192.168.12.187'
+    pi_username = 'dstreeb'
+    pi_password = '1428'
     
-    local_path = 'CombinedSTL\combined_letters.gcode'
-    remote_path = ''
+    local_path = r'CombinedSTL/combined_letters.gcode'
+    remote_path = r'/home/pi/gCode/letters.gcode'
     
     #ssh setup
     ssh_client = paramiko.SSHClient()
@@ -54,9 +52,9 @@ def send_to_pi():
         ssh_client.close()
     
    
-def main():
+if __name__ == '__main__':
     #call slice_stl_to_gcode for slicing
-    slice_stl_to_gcode()
+    # slice_stl_to_gcode()
     
     #send gcode file to Raspberry Pi and execute a command
     send_to_pi()
