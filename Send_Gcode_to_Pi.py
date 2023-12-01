@@ -3,8 +3,8 @@ import paramiko
 
 def slice_stl_to_gcode():
     #Convert the stl file into gcode using slic3r
-    slic3r_path = r'"C:/Users/Ayush Adhikari/Documents/Slic3r/Slic3r-console.exe"'
-    stl_file = r'"CombinedSTL/combined_letters.stl"'
+    slic3r_path = r'C:/Users/TEMP/Documents/Slic3r/Slic3r-console.exe'
+    stl_file = r'C:/Users/TEMP/Documents/Visual_Studio_Code/Handwriting_to_3DPrinted_Braille/CombinedSTL/combined_letters.stl'
     command = [slic3r_path, stl_file]
     
     try:
@@ -39,9 +39,11 @@ def send_to_pi():
         
         #execute command on Pi
         command = f'python Send_to_Printer.py {remote_path}'
-        stdin, stdout, stderr = ssh_client.exec_command(command)
+        _, stdout, stderr = ssh_client.exec_command(command)
         output = stdout.read().decode('utf-8')
+        errors = stderr.read().decode('utf-8')
         print(f'Raspberry Pi command output: {output}')
+        print(f'Raspberry Pi errors: {errors}')
         
     except paramiko.AuthenticationException as auth_exception:
         print(f"Authentication failed: {auth_exception}")
@@ -52,9 +54,9 @@ def send_to_pi():
         ssh_client.close()
     
    
-if __name__ == '__main__':
+def main():
     #call slice_stl_to_gcode for slicing
-    # slice_stl_to_gcode()
+    slice_stl_to_gcode()
     
     #send gcode file to Raspberry Pi and execute a command
     send_to_pi()
