@@ -31,5 +31,5 @@ if __name__ == '__main__':
 
     g_code_file_path = sys.argv[1]
     
-    send_to_3D_printer('CombinedSTL\combined_letters.gcode')
+    send_to_3D_printer(g_code_file_path)
 
