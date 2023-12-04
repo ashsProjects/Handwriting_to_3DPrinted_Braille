@@ -3,7 +3,7 @@ import serial
 import time
 
 def send_to_3D_printer(file_path):
-    port = 'COM3' #Change this to Ender 3 Pro's port
+    port = 'COM3' #COM3 is for Windows port; change to a valid port on another os
     baudrate = 115200
     
     # Open serial connection to the printer
@@ -22,7 +22,7 @@ def send_to_3D_printer(file_path):
     # Send G-code commands to the printer
     for command in gcode_commands:
         ser.write(str.encode(command))
-        time.sleep(1)
+        time.sleep(0.5)
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:

@@ -3,8 +3,8 @@ import paramiko
 
 def slice_stl_to_gcode():
     #Convert the stl file into gcode using slic3r
-    slic3r_path = r'C:/Users/TEMP/Documents/Slic3r/Slic3r-console.exe'
-    stl_file = r'C:/Users/TEMP/Documents/Visual_Studio_Code/Handwriting_to_3DPrinted_Braille/CombinedSTL/combined_letters.stl'
+    slic3r_path = r'C:/Users/TEMP/Documents/Slic3r/Slic3r-console.exe'#change to slic3r path on device
+    stl_file = r'/CombinedSTL/combined_letters.stl'
     command = [slic3r_path, stl_file]
     
     try:
@@ -18,8 +18,8 @@ def send_to_pi():
     pi_username = 'dstreeb'
     pi_password = '1428'
     
-    local_path = r'CombinedSTL/combined_letters.gcode'
-    remote_path = r'/home/pi/gCode/letters.gcode'
+    local_path = 'CombinedSTL/combined_letters.gcode'
+    remote_path = '/home/dstreeb/gCode/letters.gcode'
     
     #ssh setup
     ssh_client = paramiko.SSHClient()
