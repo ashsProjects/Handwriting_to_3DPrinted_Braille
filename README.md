@@ -22,7 +22,7 @@ Download the report here: <a href="https://drive.google.com/uc?export=download&i
 4. *Main.py* Manages all of the other scripts. It will end after the gcode has been sent to the Pi for further processing
 5. *Print_STL.py* Matches all letters to stl files and combines them together side by side in the y direction
 6. *Process_Image.py* Preprocesses the input image and separates letters into the IndividualLetters folder after finding contours
-7. *requirements.txt* Python modules used for the project; use pip install -r Requirements.txt
+7. *requirements.txt* Python modules used for the project
 8. *Send_Gcode_to_Pi.py* Used to slice the stl file into a gcode file used by the 3D printer and send that file to the Raspberry Pi; requires ssh to transmit gcode to      Pi and execute the Send_to_Printer.py file from the Pi's shell
 9. *Send_to_Printer.py* Uses pyserial to send the gcode to the 3D printer using the open port on the Raspberry Pi
 
@@ -34,6 +34,11 @@ Download the report here: <a href="https://drive.google.com/uc?export=download&i
 Clone the repository using:
 ```bash
 $ git clone https://github.com/ashsProjects/Handwriting_to_3DPrinted_Braille.git
+```
+
+Download required modules using pip:
+```bash
+$ pip install -r Requirements.txt
 ```
 
 Run the program:
